@@ -245,7 +245,7 @@ export function compile(
   const env = getChildEnv({});
   const data = { ...GlobalConfig.get(), ...input, env };
   const filteredInput = filterFields ? proxyCompileInput(data) : data;
-  logger.trace({ template, filteredInput }, 'Compiling template');
+  logger.trace({ template, input, filteredInput }, 'Compiling template');
   if (filterFields) {
     const matches = template.matchAll(templateRegex);
     for (const match of matches) {
