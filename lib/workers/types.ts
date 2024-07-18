@@ -72,6 +72,7 @@ export interface BranchUpgradeConfig
 
   updatedPackageFiles?: FileChange[];
   updatedArtifacts?: FileChange[];
+  postUpgradeCommandStdout ?: string[];
 
   logJSON?: ChangeLogResult | null;
 

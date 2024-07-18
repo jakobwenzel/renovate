@@ -140,6 +140,7 @@ export const allowedFields = {
     'The name of the directory that the dependency was found in, without full path',
   parentOrg: 'The name of the parent organization for the current repository',
   platform: 'VCS platform in use, e.g. "github", "gitlab", etc.',
+  postUpgradeCommandStdout: 'Array of postUpgradeCommands\' standard output',
   prettyDepType: 'Massaged depType',
   prettyNewMajor: 'The new major value with v prepended to it.',
   prettyNewVersion: 'The new version value with v prepended to it.',

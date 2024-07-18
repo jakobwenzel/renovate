@@ -22,6 +22,7 @@ import type { BranchConfig, BranchUpgradeConfig } from '../../../types';
 export interface PostUpgradeCommandsExecutionResult {
   updatedArtifacts: FileChange[];
   artifactErrors: ArtifactError[];
+  postUpgradeCommandStdout: string[];
 }
 
 export async function postUpgradeCommandsExecutor(
@@ -37,6 +38,7 @@ export async function postUpgradeCommandsExecutor(
     'allowPostUpgradeCommandTemplating',
   );
 
+  let postUpgradeCommandStdout = [...(config.postUpgradeCommandStdout ?? [])];
   for (const upgrade of filteredUpgradeCommands) {
     addMeta({ dep: upgrade.depName });
     logger.trace(
@@ -84,6 +86,8 @@ export async function postUpgradeCommandsExecutor(
               { cmd: compiledCmd, ...execResult },
               'Executed post-upgrade task',
             );
+
+            postUpgradeCommandStdout.push(execResult.stdout);
           } catch (error) {
             artifactErrors.push({
               lockFile: upgrade.packageFile,
@@ -157,7 +161,7 @@ export async function postUpgradeCommandsExecutor(
       }
     }
   }
-  return { updatedArtifacts, artifactErrors };
+  return { updatedArtifacts, artifactErrors, postUpgradeCommandStdout };
 }
 
 export default async function executePostUpgradeCommands(
@@ -193,11 +197,12 @@ export default async function executePostUpgradeCommands(
       postUpgradeTasks.executionMode === 'update',
   );
 
-  const { updatedArtifacts, artifactErrors } =
+  const { updatedArtifacts, artifactErrors, postUpgradeCommandStdout } =
     await postUpgradeCommandsExecutor(updateUpgradeCommands, config);
   return postUpgradeCommandsExecutor(branchUpgradeCommands, {
     ...config,
     updatedArtifacts,
     artifactErrors,
+    postUpgradeCommandStdout,
   });
 }

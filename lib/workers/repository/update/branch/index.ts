@@ -512,9 +512,10 @@ export async function processBranch(
         await executePostUpgradeCommands(config);
 
       if (postUpgradeCommandResults !== null) {
-        const { updatedArtifacts, artifactErrors } = postUpgradeCommandResults;
+        const { updatedArtifacts, artifactErrors, postUpgradeCommandStdout } = postUpgradeCommandResults;
         config.updatedArtifacts = updatedArtifacts;
         config.artifactErrors = artifactErrors;
+        config.postUpgradeCommandStdout = postUpgradeCommandStdout;
       }
 
       removeMeta(['dep']);
